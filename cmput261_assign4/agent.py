@@ -56,7 +56,11 @@ class QLearningAgent():
 
         ### TODO ###
 
-        raise NotImplementedError
+        next_state_action_values = np.array([self.values.get_value(next_state, next_action) for next_action in range(len(self.actions))])
+
+        self.values.set_value(state, action, self.values.get_value(state, action) + STEP_SIZE * (reward + GAMMA * np.max(next_state_action_values) - self.values.get_value(state, action)))
+
+        # raise NotImplementedError
 
 
     def get_action(self, state):
@@ -84,7 +88,14 @@ class QLearningAgent():
 
         ### TODO ###
 
-        raise NotImplementedError
+        rand_value = np.random.rand()
+
+        if rand_value > EPSILON:
+            return self.get_greedy_action(state)
+        else:
+            return np.random.randint(len(self.actions))
+
+        # raise NotImplementedError
 
 
     def get_greedy_action(self, state):
@@ -109,4 +120,10 @@ class QLearningAgent():
 
         ### TODO ###
 
-        raise NotImplementedError
+        next_state_action_values = np.array([self.values.get_value(state, next_action) for next_action in range(len(self.actions))])
+
+        next_state_max_actions_indices = np.flatnonzero(next_state_action_values == np.max(next_state_action_values))
+
+        return np.random.choice(next_state_max_actions_indices)
+
+        # raise NotImplementedError
